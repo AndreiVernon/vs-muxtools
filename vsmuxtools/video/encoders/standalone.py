@@ -67,6 +67,7 @@ class x264(SupportsQP):
 
         process = subprocess.Popen(args, stdin=subprocess.PIPE)
         self.update_process_affinity(process.pid)
+        assert process.stdin
         clip.output(process.stdin, y4m=True)
         process.communicate()
         return out
@@ -131,6 +132,7 @@ class x265(SupportsQP):
 
         process = subprocess.Popen(args, stdin=subprocess.PIPE)
         self.update_process_affinity(process.pid)
+        assert process.stdin
         clip.output(process.stdin, y4m=True)
         process.communicate()
         return out
@@ -326,6 +328,7 @@ E 0 18446744073709551615 1 787 1
 
         process = subprocess.Popen(args, stdin=subprocess.PIPE)
         self.update_process_affinity(process.pid)
+        assert process.stdin
         clip.output(process.stdin, y4m=True)
         process.communicate()
 
