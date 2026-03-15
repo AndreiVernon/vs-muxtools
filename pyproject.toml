@@ -37,6 +37,7 @@ dev = [
     "sox>=1.5.0",
     "mypy==1.17.1",
     "ty==0.0.1a19",
+    "vsstubs>=1.0.2; python_version>='3.13'",
 ]
 
 [build-system]
