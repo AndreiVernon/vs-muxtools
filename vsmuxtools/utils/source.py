@@ -14,7 +14,7 @@ from vstools import (
     DitherType,
     FieldBasedLike,
     ChromaLocationLike,
-    vs_object,
+    VSObject,
 )
 from muxtools import (
     Trim,
@@ -69,7 +69,7 @@ class SourceFilter(IntEnum):
     """Alias for BESTSOURCE"""
 
 
-class src_file(vs_object):
+class src_file(VSObject):
     file: Path | list[Path]
     trim: Trim | None = None
     preview_sourcefilter: SourceFilter | None
