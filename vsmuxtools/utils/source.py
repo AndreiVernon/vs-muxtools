@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 from typing import Callable, Sequence, TYPE_CHECKING, MutableMapping, Any
 from fractions import Fraction
@@ -28,7 +29,6 @@ from muxtools import (
     TrackType,
     GlobSearch,
     error,
-    debug,
     warn,
     ParsedFile,
 )
@@ -39,6 +39,12 @@ from muxtools.audio.preprocess import classproperty
 
 
 __all__ = ["src_file", "SRC_FILE", "FileInfo", "src", "frames_to_samples", "f2s", "SourceFilter"]
+
+PREVIEWER_MODULES = ["__vspreview__", "__vsview__"]
+
+
+def is_previewing() -> bool:
+    return any([bool(module) for module in [sys.modules.get(name) for name in PREVIEWER_MODULES]])
 
 
 class SourceFilter(IntEnum):
@@ -336,14 +342,6 @@ def src(
             raise error("Trying to use a dgi file without dgdecodenv installed.", src)
         return core.lazy.dgdecodenv.DGSource(str(filePath.resolve()) if not dgiFile.exists() else str(dgiFile.resolve()), **kwargs)
 
-    is_previewing = False
-    try:
-        from vspreview import is_preview  # type: ignore
-
-        is_previewing = is_preview()
-    except:
-        debug("Could not check if we're currently previewing. Is vspreview installed?", src)
-
     force_lsmas = kwargs.pop("force_lsmas", False)
     if force_lsmas:
         warn("force_lsmas is deprecated!\nPlease switch to using the explicit sourcefilter params.", src, 5)
@@ -362,7 +360,7 @@ def src(
     if sourcefilter is SourceFilter.AUTO:
         sourcefilter = SourceFilter.LSMASH if "m2ts" in filePath.name.lower() else SourceFilter.BESTSOURCE
 
-    if is_previewing and preview_sourcefilter is not None:
+    if is_previewing() and preview_sourcefilter is not None:
         return _call_sourcefilter(filePath.resolve(), preview_sourcefilter, **kwargs)
     else:
         return _call_sourcefilter(filePath.resolve(), sourcefilter, **kwargs)
