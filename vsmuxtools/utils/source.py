@@ -413,14 +413,15 @@ f2s = frames_to_samples
 
 
 def generate_keyframes(clip: vs.VideoNode, start_frame: int = 0) -> list[int]:
-    clip = clip.resize.Bilinear(640, 360, format=vs.YUV410P8)
-    clip = clip.wwxd.WWXD()
+    clip = clip.resize.Bilinear(640, 360, format=vs.YUV420P8)
     if start_frame:
         clip = clip[start_frame:]
 
+    clip = clip.scxvid.Scxvid()
+
     frames = list[int]()
-    for i in range(1, clip.num_frames):
-        if clip.get_frame(i).props.Scenechange == 1:
+    for i, frame in enumerate(clip.frames(close=True)):
+        if frame.props._SceneChangePrev == 1:
             frames.append(i)
 
     return frames
