@@ -127,7 +127,6 @@ class SupportsQP(VideoEncoder):
         if clip.format.bits_per_sample > (12 if self.x265 else 10):
             warn(f"This encoder does not support a bit depth over {(12 if self.x265 else 10)}.\nClip will be dithered to 10 bit.", self, 2)
             clip = finalize_clip(clip, 10)
-        self._update_settings(clip, self.x265)
         out = make_output(
             ensure_path_exists(self.qp_clip.file, self).stem if isinstance(self.qp_clip, src_file) else "encoded",
             "265" if self.x265 else "264",
@@ -135,6 +134,7 @@ class SupportsQP(VideoEncoder):
             outfile,
         )
         if not self.resumable:
+            self._update_settings(clip, self.x265)
             return VideoFile(self._encode_clip(clip, out, self._get_qpfile()))
 
         pattern = out.with_stem(out.stem + "_part_???")
@@ -159,6 +159,7 @@ class SupportsQP(VideoEncoder):
         # TODO: Normalize and adjust existing zones to the new start frame
 
         clip = clip[start_frame:]
+        self._update_settings(clip, self.x265)
         self._encode_clip(clip, fout, self._get_qpfile(start_frame), start_frame)
 
         info("Remuxing and merging parts...")
