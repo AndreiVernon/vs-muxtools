@@ -1553,6 +1553,7 @@ source = { editable = "." }
 dependencies = [
     { name = "muxtools" },
     { name = "numpy" },
+    { name = "pyparsebluray" },
     { name = "vapoursynth" },
     { name = "vsjetpack" },
 ]
@@ -1583,6 +1584,7 @@ dev = [
 requires-dist = [
     { name = "muxtools", git = "https://github.com/Jaded-Encoding-Thaumaturgy/muxtools.git" },
     { name = "numpy", specifier = ">=1.24.3" },
+    { name = "pyparsebluray", specifier = ">=0.1.4" },
     { name = "vapoursynth", specifier = ">=67" },
     { name = "vapoursynth-bestsource", marker = "extra == 'extra'", specifier = ">=17.0" },
     { name = "vapoursynth-ffms2", marker = "extra == 'extra'", specifier = ">=5.2.0" },

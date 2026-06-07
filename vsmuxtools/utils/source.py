@@ -4,6 +4,7 @@ from typing import Callable, Sequence, TYPE_CHECKING, MutableMapping, Any
 from fractions import Fraction
 from jetpytools import KwargsT
 from enum import IntEnum
+from pyparsebluray import mpls as py_mpls
 from vstools import (
     vs,
     core,
@@ -45,6 +46,43 @@ PREVIEWER_MODULES = ["__vspreview__", "__vsview__"]
 
 def is_previewing() -> bool:
     return any([bool(module) for module in [sys.modules.get(name) for name in PREVIEWER_MODULES]])
+
+
+def _get_mpls_clip_id(play_item: py_mpls.play_item.PlayItem, angle: int) -> str:
+    clip_id = play_item.clip_information_filename
+    if not clip_id:
+        raise error("Encountered a playlist item without a clip id.", "BDMV")
+
+    if angle == 0:
+        return clip_id
+
+    if angle < 0:
+        raise error("Angle cannot be negative.", "BDMV")
+
+    alternate_angles = play_item.angles or []
+    if not play_item.is_multi_angle or angle > len(alternate_angles):
+        raise error(
+            f"Playlist item '{clip_id}' only has {len(alternate_angles) + 1} angle(s); requested angle index {angle}.",
+            "BDMV",
+        )
+
+    return alternate_angles[angle - 1].clip_information_filename
+
+
+def _read_bdmv_playlist(root_dir: Path, playlist: int, angle: int) -> list[Path]:
+    mpls_path = ensure_path_exists(root_dir / "PLAYLIST" / f"{playlist:05d}.mpls", "BDMV")
+    stream_dir = ensure_path_exists(root_dir / "STREAM", "BDMV", True)
+
+    with mpls_path.open("rb") as mpls_file:
+        movie_playlist = py_mpls.load_movie_playlist(mpls_file)
+        mpls_file.seek(movie_playlist.playlist_start_address)
+        parsed_playlist = py_mpls.load_playlist(mpls_file)
+
+    play_items = parsed_playlist.play_items or []
+    if not play_items:
+        raise error(f"Playlist '{mpls_path.name}' contains no play items.", "BDMV")
+
+    return [ensure_path_exists(stream_dir / f"{_get_mpls_clip_id(item, angle)}.m2ts", "BDMV") for item in play_items]
 
 
 class SourceFilter(IntEnum):
@@ -275,8 +313,9 @@ class src_file(VSObject):
         **kwargs: KwargsT,
     ) -> "src_file":
         root_dir = ensure_path_exists(root_dir, "BDMV", True)
-        mpls = core.mpls.Read(str(root_dir), playlist, angle)
-        playlist_clips: list[str] = mpls["clip"]  # type: ignore
+        if (bdmv_dir := (root_dir / "BDMV")).exists() and bdmv_dir.is_dir():
+            root_dir = bdmv_dir
+        playlist_clips = _read_bdmv_playlist(root_dir, playlist, angle)
         if entries is not None:
             if isinstance(entries, int):
                 clips = playlist_clips[entries]

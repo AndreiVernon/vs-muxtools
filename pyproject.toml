@@ -9,6 +9,7 @@ dependencies = [
     "vsjetpack>=0.7.0",
     "numpy>=1.24.3",
     "muxtools>=0.4.2",
+    "pyparsebluray>=0.1.4",
 ]
 classifiers = [
     "Natural Language :: English",
