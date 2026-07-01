@@ -60,6 +60,7 @@ class x264(SupportsQP):
     def __post_init__(self):
         self.executable = get_executable("x264")
         self._init_settings(self.x265)
+        self.resumable = self._allow_resumable(self.x265)
 
     def _encode_clip(self, clip: vs.VideoNode, out: Path, qpfile: str | None, start_frame: int = 0) -> Path:
         args = [self.executable, "-o", str(out.resolve())]
@@ -126,6 +127,7 @@ class x265(SupportsQP):
     def __post_init__(self):
         self.executable = get_executable("x265")
         self._init_settings(self.x265)
+        self.resumable = self._allow_resumable(self.x265)
 
     def _encode_clip(self, clip: vs.VideoNode, out: Path, qpfile: str | None, start_frame: int = 0) -> Path:
         args = [self.executable, "-o", str(out.resolve())]

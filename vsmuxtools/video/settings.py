@@ -140,6 +140,7 @@ def settings_builder_x265(
     b_intra: bool = True,
     weightb: bool = True,
     deblock: list[int] | str = [-2, -2],
+    open_gop: bool = False,
     append: str = "",
     **kwargs,
 ) -> str:
@@ -151,6 +152,7 @@ def settings_builder_x265(
     # Less simple
     settings += f" --{'rect' if rect else 'no-rect'} --{'amp' if amp else 'no-amp'} --{'tskip' if tskip else 'no-tskip'}"
     settings += f" --{'b-intra' if b_intra else 'no-b-intra'} --{'weightb' if weightb else 'no-weightb'} --{'cutree' if cutree else 'no-cutree'}"
+    settings += f" --{'open-gop' if open_gop else 'no-open-gop'}"
     settings += f" --rskip {int(rskip) if isinstance(rskip, bool) else rskip}"
 
     if isinstance(deblock, list):
@@ -158,7 +160,7 @@ def settings_builder_x265(
     settings += f" --deblock={deblock}"
 
     # Don't need to change these lol
-    settings += " --no-sao --no-sao-non-deblock --no-strong-intra-smoothing --no-open-gop"
+    settings += " --no-sao --no-sao-non-deblock --no-strong-intra-smoothing"
 
     for k, v in kwargs.items():
         prefix = "--"
@@ -190,6 +192,7 @@ def settings_builder_x264(
     merange: int = 32,
     deblock: list[int] | str = [-1, -1],
     dct_decimate: bool = False,
+    open_gop: bool = False,
     append: str = "",
     **kwargs,
 ) -> str:
@@ -199,6 +202,8 @@ def settings_builder_x264(
     settings += f" --psy-rd {psy_rd}:{psy_trellis} --subme {subme} --threads {threads}"
     if trellis is not None:
         settings += f" --trellis {trellis}"
+    if open_gop:
+        settings += " --open-gop"
 
     # Less simple
     settings += f" {'--no-mbtree' if not mbtree else ''} {'--no-dct-decimate' if not dct_decimate else ''}"

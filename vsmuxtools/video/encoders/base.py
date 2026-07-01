@@ -99,6 +99,21 @@ class SupportsQP(VideoEncoder):
 
         return ""
 
+    def _allow_resumable(self, x265: bool) -> bool:
+        if not isinstance(self.settings, (str, list)):
+            return True
+
+        allowed = True
+        if x265:
+            allowed = "--no-open-gop" in self.settings
+        else:
+            allowed = "--open-gop" not in self.settings
+
+        if not allowed:
+            info("Encode will not be resumable due to using open-gop.", self)
+
+        return allowed
+
     def _init_settings(self, x265: bool):
         if not self.settings:
             s, p = file_or_default(f"{'x265' if x265 else 'x264'}_settings", sb265() if x265 else sb264())
