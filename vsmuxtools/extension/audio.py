@@ -19,6 +19,7 @@ from muxtools import (
     ensure_path,
 )
 from muxtools.utils.types import TimeScale, TimeScaleT, TimeSourceT
+from wakepy import keep
 
 from ..utils.source import src_file
 from ..utils.audio import audio_async_render
@@ -44,6 +45,7 @@ def export_audionode(node: vs.AudioNode, outfile: PathLike | None = None) -> Pat
     return outfile
 
 
+@keep.running
 def do_audio(
     fileIn: PathLike | list[PathLike] | list[Path] | src_file | vs.AudioNode,
     track: int = 0,

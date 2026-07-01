@@ -3,6 +3,7 @@ import numpy as np
 from enum import IntEnum
 from typing import BinaryIO, Optional
 from vstools import vs
+from wakepy import keep
 
 __all__ = ["audio_async_render", "WaveHeader"]
 
@@ -49,6 +50,7 @@ WAVE_FMT_EXTENSIBLE_SUBFORMAT = (
 )
 
 
+@keep.running
 def audio_async_render(
     audio: vs.AudioNode, outfile: BinaryIO, header: WaveHeader = WaveHeader.AUTO, progress: Optional[str] = "Rendering audio..."
 ) -> None:

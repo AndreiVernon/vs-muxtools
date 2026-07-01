@@ -470,6 +470,15 @@ wheels = [
 ]
 
 [[package]]
+name = "jeepney"
+version = "0.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7b/6f/357efd7602486741aa73ffc0617fb310a29b588ed0fd69c2399acbb85b0c/jeepney-0.9.0.tar.gz", hash = "sha256:cf0e9e845622b81e4a28df94c40345400256ec608d0e55bb8a3feaa9163f5732", size = 106758, upload-time = "2025-02-27T18:51:01.684Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b2/a3/e137168c9c44d18eff0376253da9f1e9234d0239e0ee230d2fee6cea8e55/jeepney-0.9.0-py3-none-any.whl", hash = "sha256:97e5714520c16fc0a45695e5365a2e11b81ea79bba796e26f9f1d178cb182683", size = 49010, upload-time = "2025-02-27T18:51:00.104Z" },
+]
+
+[[package]]
 name = "jetpytools"
 version = "2.2.7"
 source = { registry = "https://pypi.org/simple" }
@@ -599,11 +608,13 @@ wheels = [
 
 [[package]]
 name = "muxtools"
-version = "0.4.3.dev4+gd2b3880"
-source = { git = "https://github.com/Jaded-Encoding-Thaumaturgy/muxtools.git#d2b3880f5e434a6759d8e0013d154129ed149126" }
+version = "0.4.3.dev6+g0604ca6"
+source = { git = "https://github.com/Jaded-Encoding-Thaumaturgy/muxtools.git#0604ca6a52ed62cdd75d5a2c8773bb5f6a78c15b" }
 dependencies = [
     { name = "ass" },
+    { name = "ass-tag-analyzer" },
     { name = "fontcollector" },
+    { name = "fonttools" },
     { name = "langcodes" },
     { name = "language-data" },
     { name = "mkvinfo" },
@@ -1556,6 +1567,7 @@ dependencies = [
     { name = "pyparsebluray" },
     { name = "vapoursynth" },
     { name = "vsjetpack" },
+    { name = "wakepy" },
 ]
 
 [package.optional-dependencies]
@@ -1591,6 +1603,7 @@ requires-dist = [
     { name = "vapoursynth-scxvid", marker = "extra == 'extra'", specifier = ">=3.0" },
     { name = "vsjetpack", specifier = ">=0.7.0" },
     { name = "vsjetpack", extras = ["basic"], marker = "extra == 'extra'", specifier = ">=1.5.0" },
+    { name = "wakepy", specifier = "~=1.0.0" },
 ]
 provides-extras = ["extra"]
 
@@ -1624,6 +1637,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/46/48/1f2451abf3f8ec5cd83fdfd35650315bbeb89417e89323194df38ce66740/vsstubs-2.1.0.tar.gz", hash = "sha256:6c2eda03c1ab3c10109961dffdc97d43f050eb0e6762bcdd338146060d1b0c2f", size = 35879, upload-time = "2026-05-24T14:19:35.13Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2a/58/c8ff418b8ddfc633d5511776882a6882e10a8453f9a9b6022ea8161f3453/vsstubs-2.1.0-py3-none-any.whl", hash = "sha256:12fbadb823ff74159a887d63587b2ea4f1c5a97037654a50a8aba64e97030093", size = 30527, upload-time = "2026-05-24T14:19:34.014Z" },
+]
+
+[[package]]
+name = "wakepy"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jeepney", marker = "platform_system == 'DragonFly' or platform_system == 'FreeBSD' or platform_system == 'Minix' or platform_system == 'NetBSD' or platform_system == 'OpenBSD' or platform_system == 'SunOS' or sys_platform == 'aix' or sys_platform == 'linux'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d6/13/78e45a3d2cd754f95d2fca5aece046676da559b8e34e294e69bb441f18fd/wakepy-1.0.0.tar.gz", hash = "sha256:a9425e8e77e89bccfe24a70f33ecd8596b474c75ddac79310cd54f2bc92210e3", size = 323693, upload-time = "2026-02-07T21:20:32.244Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/52/33/e692c64d00b7a0d203191b1a20c81c32dca93da38345f6f1ad91426e36fc/wakepy-1.0.0-py3-none-any.whl", hash = "sha256:d5497640791517982cf66d894c502e9fa5133dc75c4a45d3b18a3495d1cf8afb", size = 70336, upload-time = "2026-02-07T21:20:31.027Z" },
 ]
 
 [[package]]

@@ -7,6 +7,8 @@ from muxtools.utils.env import get_binary_version
 from muxtools.utils.dataclass import dataclass, allow_extra
 import re
 import json
+
+from wakepy import keep
 from .base import SupportsQP, VideoEncoder
 from .types import LosslessPreset
 from .noise import (
@@ -182,6 +184,7 @@ class LosslessX264(VideoEncoder):
     settings: str | None = None
     add_props: bool = True
 
+    @keep.running
     def encode(self, clip: vs.VideoNode, outfile: PathLike | None = None) -> VideoFile:
         out = make_output("lossless", "264", user_passed=outfile)
         match self.preset:
@@ -271,6 +274,7 @@ class SVTAV1(VideoEncoder):
         except ValueError:
             raise error("Couldn't parse mkvextract version. v96.0 or newer is required for resumable AV1 encodes.", self)
 
+    @keep.running
     def encode(self, clip: vs.VideoNode, outfile: PathLike | None = None) -> VideoFile:
         if clip.format.bits_per_sample > 10:
             warn("SVT-AV1 doesn't support a bit depth over 10.\nClip will be dithered to 10 bit.", self, 2)

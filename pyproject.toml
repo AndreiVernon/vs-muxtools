@@ -10,6 +10,7 @@ dependencies = [
     "numpy>=1.24.3",
     "muxtools>=0.4.2",
     "pyparsebluray>=0.1.4",
+    "wakepy~=1.0.0"
 ]
 classifiers = [
     "Natural Language :: English",

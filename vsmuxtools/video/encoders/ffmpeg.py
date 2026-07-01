@@ -3,6 +3,7 @@ import subprocess
 from vstools import vs, get_video_format
 from muxtools import VideoFile, PathLike, make_output, warn, error
 from muxtools.utils.dataclass import allow_extra, dataclass
+from wakepy import keep
 
 from .base import FFMpegEncoder
 from .types import LosslessPreset, ProResProfile
@@ -20,6 +21,7 @@ class FFV1(FFMpegEncoder):
 
     settings: str | LosslessPreset = LosslessPreset.MIDDLEGROUND
 
+    @keep.running
     def encode(self, clip: vs.VideoNode, outfile: PathLike | None = None) -> VideoFile:
         bits = get_video_format(clip).bits_per_sample
         if bits > 10:
@@ -71,6 +73,7 @@ class ProRes(FFMpegEncoder):
             raise error(f"{self.profile} is not a valid ProRes profile!", self)
         super().__post_init__()
 
+    @keep.running
     def encode(self, clip: vs.VideoNode, outfile: PathLike | None = None) -> VideoFile:
         clipf = get_video_format(clip)
         if clipf.subsampling_h != 0:

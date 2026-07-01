@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from muxtools import ensure_path_exists, VideoFile, PathLike, make_output, info, warn, error, get_executable
 from muxtools.utils.dataclass import CLIKwargs
+from wakepy import keep
 
 from .types import Zone
 from ..resumable import merge_parts, parse_keyframes
@@ -123,6 +124,7 @@ class SupportsQP(VideoEncoder):
     @abstractmethod
     def _encode_clip(self, clip: vs.VideoNode, out: Path, qpfile: str | None, start_frame: int = 0) -> Path: ...
 
+    @keep.running
     def encode(self, clip: vs.VideoNode, outfile: PathLike | None = None) -> VideoFile:
         if clip.format.bits_per_sample > (12 if self.x265 else 10):
             warn(f"This encoder does not support a bit depth over {(12 if self.x265 else 10)}.\nClip will be dithered to 10 bit.", self, 2)
